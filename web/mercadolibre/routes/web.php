@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view("/","home")->name("home");
+Route::view("/agregar_A","agregar_A")->name("agregar_A");
+Route::view("/agregar_B","agregar_B")->name("agregar_B");
+Route::view("/ver_A","ver_A")->name("ver_A");
+Route::view("/ver_B","ver_B")->name("ver_B");
