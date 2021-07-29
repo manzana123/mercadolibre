@@ -41,6 +41,50 @@ href="{{route('nombreruta')}}"
 @endsection
 
 
-### 3) 
+### 3) Generar Comunicacion de peticiones para js
 
-## 3.1) 
+## 3.1) en el master crear en el head, la etiqueta meta:
+name="csrf-token" content="{{csrf_token()}}"
+
+## 3.2) crear en la carpeta public/resources/js el archivo de axios_config, y dentro colocar:
+window.axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector("meta[name='csrf-token']").content;
+
+## 3.3) nuevamente en el master, en la parte de los script, colocar los siguientes:
+src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"
+src="{{asset('js/axios_config.js')}}"
+
+## 3.4) generar controller accediendo a la shell de laravel, despues ingresar a la carpeta del proyecto (cd nombre) y luego ejecutar:
+php artisan make:controller NombreController
+## y acto seguido generar las funciones get y post correspondientes
+
+## 3.5) para acceder a la funcion del controller, debemos llamar la ruta en el archivo api.php, utilizando:
+//Route::post|get("endpoint|final de la url",[controlador::class,"metodo"])
+## e importar el controlador al inicio del archivo con:
+use App\Http\Controllers\NombreControlador;
+
+### 4) comenzamos a manejar bases de datos, y en el archivo .env cambiamos el nombre de la base de datos, como:
+DB_CONNECTION=mysql
+DB_HOST=db-mercadolibre (este dato se cambia)
+DB_PORT=3306
+DB_DATABASE=mercadolibre_db (este dato se cambia)
+DB_USERNAME=root
+DB_PASSWORD=123456 (este dato se cambia)
+## estos valores se cambian segun el dockerfile
+
+## 4.1) despues procedemos a realizar una migracion en el shell de laravel 
+## (y luego entrar a la carpeta del proyecto), utilizando el comando:
+php artisan migrate
+
+## 4.2) procedemos a crear una tabla por medio de una migracion con el siguiente codigo (en la misma shell):
+php artisan make:migration crear_tabla_nombretabla --create=nombretablaenplural
+## y procedemos a modificar los datos de la tabla en el archivo web/database/migrations/nombredelamigracion
+## y volvemos a realizar una migracion
+
+## 4.3) creamos un modelo a partir de la tabla migrada:
+php artisan make:model PrimeraLetraEnMayusculaynombredetablaensingular
+## este modelo nos permite trabajar entidades en la base de datos, en respecto de la tabla que se basa el modelo
+## para utilizarlo en el controller, lo importamos con:
+use App\Models\Nombredelmodelo;
+
+## 4.4) luego vamos al api.php para escribir las rutas de las nuevas funciones
+
